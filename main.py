@@ -32,11 +32,11 @@ class FDC:
 
 
 fdc = FDC()
-result = fdc.findFood("brussel sprouts")
-# idResult = fdc.findFood("334536")
+result = fdc.findFood("chicken")
+idResult = fdc.findFood("2029648")
 
 with open('food_data.json', 'w') as json_file:
     json.dump(result, json_file, indent=4)
 
-# with open("id.json", "w") as json_file:
-#     json.dump(idResult, json_file, indent=4)
+with open("id.json", "w") as json_file:
+    json.dump(idResult, json_file, indent=4)

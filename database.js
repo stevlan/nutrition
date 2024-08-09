@@ -3,7 +3,13 @@ import { FoodItem } from "./foodItem.js";
 export const database = (function(){
 
     const key = "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=nPemfe5FJlxyUIZiA4WFOOJ9iEbFOpeeNcOysthg&query=";
-
+    const table = []
+    let totalCals = 0;
+    let totalProtein = 0;
+    let totalFat = 0;
+    let totalCarbs = 0;
+    let totalFiber = 0;
+    let totalWeight = 0;
 
     const search = async function (){
         try{
@@ -17,7 +23,6 @@ export const database = (function(){
             //add every page?
         } catch (error){
             alert(error);
-            return null;
         }
         
     };
@@ -32,11 +37,10 @@ export const database = (function(){
             return data;
         } catch(error){
             alert(error);
-            return null;
         }
     };
 
-    const displayResults = async function(data){
+    const displayResults = function(data){
         let parent = document.querySelector(".results");
         parent.innerHTML = "";
         let arr = data.foods
@@ -56,33 +60,43 @@ export const database = (function(){
     }
 
     const addItem = function(event, data){
-        let amount = prompt("How many pounds of this item do you want to add?")
-        amount = convertToGrams(amount);
-        let num = Number(event.target.className)
-        let nutrientArray = data[num].foodNutrients
-        createItem(nutrientArray, amount, num, event.target.textContent);
+        try{
+            let amount = prompt("How many pounds of this item do you want to add?");
+            if(amount == "" && amount !== null){
+                throw new Error("Enter a valid amount!")
+            }
+            else if (amount !== null){
+                amount = convertToGrams(amount);
+                let num = Number(event.target.className)
+                let nutrientArray = data[num].foodNutrients
+                table.push(createItem(nutrientArray, amount, num, event.target.textContent));
+                addToDOM();
+            }
+        }catch(error){
+            alert(error);
+        }
     }
 
     const createItem = function(arr, amount, num, name){
 
-        let protein = arr.find((nutrient)=>nutrient.nutrientName == "Protein").value;
+        let protein = arr.find((nutrient)=>nutrient.nutrientName == "Protein") ? arr.find((nutrient)=>nutrient.nutrientName == "Protein").value : 0;
         protein = userAmount(amount, protein);
     
-        let fiber = arr.find((nutrient)=>nutrient.nutrientName == "Fiber, total dietary").value;
+        let fiber = arr.find((nutrient)=>nutrient.nutrientName == "Fiber, total dietary") ? arr.find((nutrient)=>nutrient.nutrientName == "Fiber, total dietary").value : 0;
         fiber = userAmount(amount, fiber);
     
-        let carb = arr.find((nutrient)=>nutrient.nutrientName == "Carbohydrate, by difference").value;
+        let carb = arr.find((nutrient)=>nutrient.nutrientName == "Carbohydrate, by difference") ? arr.find((nutrient)=>nutrient.nutrientName == "Carbohydrate, by difference").value : 0;
         carb = userAmount(amount,carb)
     
-        let fat = arr.find((nutrient)=>nutrient.nutrientName == "Total lipid (fat)").value;
+        let fat = arr.find((nutrient)=>nutrient.nutrientName == "Total lipid (fat)") ? arr.find((nutrient)=>nutrient.nutrientName == "Total lipid (fat)").value : 0;
         fat = userAmount(amount, fat);
     
-        let cal = arr.find((nutrient)=>nutrient.nutrientName == "Energy").value;
+        let cal = arr.find((nutrient)=>nutrient.nutrientName == "Energy") ? arr.find((nutrient)=>nutrient.nutrientName == "Energy").value : 0;
         cal = userAmount(amount, cal);
     
         const item = new FoodItem(name, amount, protein, fiber, cal, fat, carb);
-        item.print();
         
+        return item;
     }
     
     const convertToGrams = function(num){
@@ -91,6 +105,76 @@ export const database = (function(){
     
     const userAmount = function(amount, num){
         return amount/100*num;
+    }
+
+    const addToDOM = function(){
+        let div = document.createElement("div");
+        div.className = "data";
+
+        let name = document.createElement("div");
+        name.textContent = table[table.length-1].name;
+        div.appendChild(name);
+
+        let calories = document.createElement("div");
+        let num = parseFloat((table[table.length-1].cal).toFixed(2));
+        calories.textContent = num + " kcals";
+        div.appendChild(calories);
+        totalCals += num;
+
+        let protein = document.createElement("div");
+        num = parseFloat((table[table.length-1].protein).toFixed(2));
+        protein.textContent = num + " g";
+        div.appendChild(protein);
+        totalProtein += num;
+
+        let fat = document.createElement("div");
+        num = parseFloat((table[table.length-1].fat).toFixed(2));
+        fat.textContent = num + " g";
+        div.appendChild(fat);
+        totalFat += num;
+
+        let carbs = document.createElement("div");
+        num = parseFloat((table[table.length-1].carb).toFixed(2));
+        carbs.textContent = num + " g";
+        div.appendChild(carbs);
+        totalCarbs += num;
+
+        let fiber = document.createElement("div");
+        num = parseFloat((table[table.length-1].fiber).toFixed(2));
+        fiber.textContent = num + " g";
+        div.appendChild(fiber);
+        totalFiber += num;
+
+        let weight = document.createElement("div");
+        num = parseFloat((table[table.length-1].portion/453.592).toFixed(2));
+        weight.textContent = num + " lbs";
+        div.appendChild(weight);
+        totalWeight += num;
+        
+        let parent = document.querySelector(".table");
+        parent.appendChild(div);
+
+        updateTotal();
+    }
+
+    const updateTotal = function(){
+        let item = document.querySelector(".caloriesAmount");
+        item.textContent = totalCals + " kcals";
+
+        item = document.querySelector(".proteinAmount");
+        item.textContent = totalProtein + " g";
+
+        item = document.querySelector(".fatAmount");
+        item.textContent = totalFat + " g";
+
+        item = document.querySelector(".carbsAmount");
+        item.textContent = totalCarbs + " g";
+
+        item = document.querySelector(".fiberAmount");
+        item.textContent = totalFiber + " g";
+
+        item = document.querySelector(".weightAmount");
+        item.textContent = totalWeight + " lbs";
     }
     
     return { search };

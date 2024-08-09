@@ -1,0 +1,120 @@
+const myLibrary = [];
+
+function Book(title, author, pages, read){
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.read = read;
+    this.info = function(){
+        return this.title + " by " + this.author + ", " + this.pages + " pages, " + (this.read ? "read" : "not read yet");
+    };
+}
+
+function addBook(){
+    addBookToLibrary(document.querySelector('.title').value,
+    document.querySelector('.author').value,
+    document.querySelector('.pages').value,
+    document.querySelector('.read').checked);
+}
+
+function addBookToLibrary(title, author, pages, read){
+    const book = new Book(title, author, pages, read);
+    myLibrary.push(book);
+    const del = document.querySelector("form");
+    del.remove();
+    const remove = document.createElement("button");
+    remove.textContent = "Remove"
+    remove.className = "removeButton " + myLibrary.length-1;
+    const status = document.createElement("button");
+    status.textContent = "Change Read Status";
+    status.addEventListener("click", (event)=>{
+        myLibrary[Number(event.target.parentElement.className)].read = !myLibrary[Number(event.target.parentElement.className)].read;
+        event.target.parentElement.querySelector("p").textContent = myLibrary[Number(event.target.parentElement.className)].info();
+        console.log(myLibrary[Number(event.target.parentElement.className)].read);
+    })
+    const p = document.createElement("p");
+    const card = document.createElement("div");
+    card.className = myLibrary.length-1;
+    p.textContent = book.info();
+    card.appendChild(p);
+    card.appendChild(remove);
+    card.appendChild(status);
+    remove.addEventListener("click", (event) =>{
+        event.target.parentElement.remove();
+    });
+    body.appendChild(card);
+    
+}
+
+function addForm(){
+    const form = document.createElement("form");
+    form.className="form";
+    form.method="post";
+    form.action="";
+
+    const titleLabel = document.createElement("label");
+    titleLabel.htmlFor="title";
+    titleLabel.textContent="Title: "
+    form.appendChild(titleLabel);
+    const titleInput = document.createElement("input");
+    titleInput.id = "title";
+    titleInput.type = "text";
+    titleInput.name = "title";
+    titleInput.className = "title";
+    form.appendChild(titleInput);
+
+    const authorLabel = document.createElement("label");
+    authorLabel.htmlFor="author"
+    authorLabel.textContent="Author: "
+    form.appendChild(authorLabel);
+    const authorInput = document.createElement("input");
+    authorInput.id = "author";
+    authorInput.type = "text";
+    authorInput.name = "author";
+    authorInput.className = "author";
+    form.appendChild(authorInput);
+
+    const pagesLabel = document.createElement("label");
+    pagesLabel.htmlFor="pages";
+    pagesLabel.textContent="Pages: "
+    form.appendChild(pagesLabel);
+    const pagesInput = document.createElement("input");
+    pagesInput.id = "pages";
+    pagesInput.type = "number";
+    pagesInput.name = "pages";
+    pagesInput.className = "pages";
+    form.appendChild(pagesInput);
+
+    const readLabel = document.createElement("label");
+    readLabel.htmlFor="read";
+    readLabel.textContent="Have you read this book? "
+    form.appendChild(readLabel);
+    const readInput = document.createElement("input");
+    readInput.id = "read";
+    readInput.type = "checkbox";
+    readInput.name = "read";
+    readInput.className = "read";
+    form.appendChild(readInput);
+
+    const submitButton = document.createElement("button");
+    submitButton.type="button";
+    submitButton.textContent="Submit";
+    submitButton.className = "book";
+    submitButton.addEventListener("click", addBook)
+    form.appendChild(submitButton);
+
+    const body = document.querySelector("body")
+    body.appendChild(form);
+
+
+}
+
+
+// const book1 = new Book("Harry Potter", "JK Rowling", 100, false);
+// console.log(book1.info());
+
+const newButton = document.querySelector(".new")
+newButton.addEventListener("click", addForm);
+
+const body = document.querySelector("body");
+

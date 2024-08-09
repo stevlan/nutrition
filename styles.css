@@ -6,7 +6,7 @@
 
 body{
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 30% 70%;
 }
 
 .search{
@@ -16,8 +16,8 @@ body{
 
 .results{
     visibility: hidden;
-    width: 500px;
-    height: 400px;
+    width: 93.5%;
+    height: 600px;
     overflow-y: auto;
     padding:20px;
     padding-left:100px;
@@ -34,4 +34,81 @@ a{
 a:hover {
     background-color: #f1f1f1
 }
+
+.foodInput{
+    padding: 10px;
+    font-size: 17px;
+    border: 1px solid grey;
+    float: left;
+    width: 80%;
+    background: #f1f1f1;
+}
+
+.button{
+    float: left;
+    width: 20%;
+    padding: 10px;
+    background: #2196F3;
+    color: white;
+    font-size: 17px;
+    border: 1px solid grey;
+    border-left: none; /* Prevent double borders */
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0b7dda;
+}
+
+form.example::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.right{
+    height:100vh;
+    display: grid;
+    grid-template-rows: 1fr 6fr 1fr;
+    grid-row-gap: 20px;
+    padding-right: 10px;
+}
+
+h1{
+    margin-bottom: 20px;
+}
+
+.data, .total, .header{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    align-items: center;
+    border: 1px solid black; /* Border around the entire grid */
+    grid-gap: 0; /* Ensures no gap between grid items */
+}
+
+.data>*, .total>*, .header>*{
+    border: 1px solid black; /* Border for individual items */
+    text-align: center;
+    width: 100%; /* Ensures grid items fill their cells */
+    height: 100%; /* Ensures grid items fill their cells */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centers text vertically */
+    font-size: large;
+}
+
+.table{
+    overflow: scroll;
+    scrollbar-width: none;
+}
+
+.header{
+    margin-top: 10px;
+}
+
+.total{
+    margin-bottom: 10px;
+}
+
+
 
