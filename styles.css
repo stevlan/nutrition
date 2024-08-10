@@ -7,6 +7,7 @@
 body{
     display: grid;
     grid-template-columns: 30% 70%;
+    background-color: rgb(197, 184, 184);
 }
 
 .search{
@@ -16,7 +17,7 @@ body{
 
 .results{
     visibility: hidden;
-    width: 93.5%;
+    width: 89%;
     height: 600px;
     overflow-y: auto;
     padding:20px;
@@ -56,7 +57,7 @@ a:hover {
     cursor: pointer;
 }
 
-button:hover {
+.button:hover {
     background: #0b7dda;
 }
 
@@ -67,33 +68,35 @@ form.example::after {
 }
 
 .right{
-    height:100vh;
-    display: grid;
+    max-height:100vh;
+    /* display: grid;
     grid-template-rows: 1fr 6fr 1fr;
-    grid-row-gap: 20px;
-    padding-right: 10px;
+    grid-row-gap: 20px; */
+    padding: 20px;
+    overflow: auto;
+
 }
 
 h1{
     margin-bottom: 20px;
 }
 
-.data, .total, .header{
+/* .data, .total, .header{
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     align-items: center;
-    border: 1px solid black; /* Border around the entire grid */
-    grid-gap: 0; /* Ensures no gap between grid items */
+    border: 1px solid black; 
+    grid-gap: 0; 
 }
 
 .data>*, .total>*, .header>*{
-    border: 1px solid black; /* Border for individual items */
+    border: 1px solid black; 
     text-align: center;
-    width: 100%; /* Ensures grid items fill their cells */
-    height: 100%; /* Ensures grid items fill their cells */
+    width: 100%; 
+    height: 100%; 
     display: flex;
     justify-content: center;
-    align-items: center; /* Centers text vertically */
+    align-items: center; 
     font-size: large;
 }
 
@@ -108,7 +111,32 @@ h1{
 
 .total{
     margin-bottom: 10px;
+} */
+
+table{
+    width:100%;
+    overflow: auto;
+    table-layout: fixed;
+}
+
+.special{
+    width:8%;
+    border:none;
+}
+
+td, th, .total{
+    display: table-cell;
+    width: 12%; 
+    height:80px;
+    border: 1px solid;
+    text-align: center;
 }
 
 
-
+.remove{
+    padding: 10px 10px;
+    font-size:medium;
+    border-radius: 10px;
+    border: 2px solid black;
+    background-color: rgb(199, 56, 56);
+}
