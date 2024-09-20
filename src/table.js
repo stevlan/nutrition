@@ -26,15 +26,13 @@ export const table = (function(){
     let totalFiber = 0;
     let totalWeight = 0;
 
-    const add = function(amount, event, data){
-        amount = convertToGrams(amount);
-        let num = Number(event.target.className);
-        let nutrientArray = data[num].foodNutrients;
-        itemArray.push(createItem(nutrientArray, amount, num, event.target.textContent));
+    const add = function(amount, item){
+        let nutrientArray = item.foodNutrients;
+        itemArray.push(createItem(nutrientArray, amount, (item.hasOwnProperty("brandOwner") ? item.description + " from " + item.brandOwner : item.description)));
         addToDOM();
     }
 
-    const createItem = function(arr, amount, num, name){
+    const createItem = function(arr, amount, text){
 
         let protein = arr.find((nutrient)=>nutrient.nutrientName == "Protein") ? arr.find((nutrient)=>nutrient.nutrientName == "Protein").value : 0;
         protein = userAmount(amount, protein);
@@ -51,14 +49,14 @@ export const table = (function(){
         let cal = arr.find((nutrient)=>nutrient.nutrientName == "Energy") ? arr.find((nutrient)=>nutrient.nutrientName == "Energy").value : 0;
         cal = userAmount(amount, cal);
     
-        const item = new FoodItem(name, amount, protein, fiber, cal, fat, carb);
+        const item = new FoodItem(text, Number(amount), protein, fiber, cal, fat, carb);
         
         return item;
     }
     
-    const convertToGrams = function(num){
-        return num*453.592;
-    }
+    // const convertToGrams = function(num){
+    //     return num*453.592;
+    // }
     
     const userAmount = function(amount, num){
         return amount/100*num;
@@ -159,10 +157,10 @@ export const table = (function(){
         totalFiber += num;
 
         cell = document.createElement("td");
-        num = format(itemArray[itemArray.length-1].portion/453.592);
-        cell.textContent = num + (num==1 ? " lb" : " lbs");
+        num = format(itemArray[itemArray.length-1].portion);
+        cell.textContent = num + " g"
         row.appendChild(cell);
-        // totalWeight += num;
+        totalWeight += num;
         
         let parent = document.querySelector("tbody");
         parent.appendChild(row);
@@ -194,8 +192,8 @@ export const table = (function(){
         num = format(itemArray[index].fiber);
         totalFiber -= num;
 
-        // num = format(itemArray[index].portion/453.592);
-        // totalWeight -= num;
+        num = format(itemArray[index].portion);
+        totalWeight -= num;
 
         itemArray.splice(index,1);
 
@@ -241,8 +239,8 @@ export const table = (function(){
         item = document.querySelector(".fiberAmount");
         item.textContent = format(totalFiber) + " g";
 
-        // item = document.querySelector(".weightAmount");
-        // item.textContent = format(totalWeight) + (format(totalWeight) == 1 ? " lb" : " lbs");
+        item = document.querySelector(".weightAmount");
+        item.textContent = format(totalWeight) + " g"
     }
 
     return {add};

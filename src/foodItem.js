@@ -11,7 +11,7 @@ export class FoodItem{
 
     print(){
         console.log("Item: " + this.name + "\n" + 
-            "Portion (pounds): " + this.portion/453.592 + "\n" + 
+            "Portion (pounds): " + this.portion + "\n" + 
             "Calories: " + this.cal + "\n" +
             "Protein (g): " + this.protein + "\n" + 
             "Fiber (g): " + this.fiber + "\n" + 

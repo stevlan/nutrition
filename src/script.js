@@ -6,6 +6,6 @@ import {database} from "./database.js";
 
 // ReactDOM.render(<InputField />, document.querySelector("#inputFieldContainer"));
 
-let btn = document.querySelector(".button");
-btn.addEventListener("click", database.search);
+// let btn = document.querySelector(".button");
+// btn.addEventListener("click", database.search);
 
