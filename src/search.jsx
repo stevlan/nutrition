@@ -2,6 +2,7 @@ import React from 'react';
 import './styles.css';
 import { useState } from 'react';
 import { table } from './table';
+import { useEffect } from 'react';
 
 const API_KEY = "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=nPemfe5FJlxyUIZiA4WFOOJ9iEbFOpeeNcOysthg&query=";
 
@@ -10,25 +11,31 @@ function Search(){
     const [results, setResults] = useState([]);
     const [currentItem, setCurrentItem] = useState();
 
-    const search = async (string) =>{
-        setSearchText(string);
-        if (!string.trim()) {
-            setResults([]);
+
+    useEffect(()=>{
+        if (!searchText.trim()) {
+            setResults([]);  // Reset results if search text is empty
             return;
         }
-        try{
-            let formatted = string.replace(" ", "%20");
-            const data = await getJSON(formatted);
-            if (data && data.foods) {
-                setResults(data.foods);
-            } else {
-                setResults([]); 
+
+        const search = async () =>{
+            try{
+                let formatted = searchText.replace(" ", "%20");
+                const data = await getJSON(formatted);
+                if (data && data.foods) {
+                    setResults(data.foods);
+                } else {
+                    setResults([]); 
+                }
+            } catch (error){
+                alert(error);
             }
-        } catch (error){
-            alert(error);
-        }
-        
-    };
+            
+        };
+
+        search();
+
+    }, [searchText])
 
     const getJSON = async (string) =>{
         try{
@@ -67,7 +74,7 @@ function Search(){
         <>
             <div class="searchBar">
                 <h1>Search For Food</h1>
-                <input type="text" className="foodInput" placeholder="Enter food item" onChange={(e) => search(e.target.value)} value={searchText}></input>
+                <input type="text" className="foodInput" placeholder="Enter food item" onChange={(e) => setSearchText(e.target.value)} value={searchText}></input>
             </div>
             <div className="results">
                 {results.length > 0 ? 
